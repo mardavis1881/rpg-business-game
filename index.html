@@ -1,0 +1,90 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+
+export default function RPGGame() {
+  const [xp, setXp] = useState(0);
+  const [balance, setBalance] = useState(0);
+
+  const tasks = [
+    { name: "Successful Hit", xp: 60, money: 60 },
+    { name: "Find Working Seller", xp: 300, money: 40 },
+    { name: "Seller Orders 4oz+", xp: 300, money: 35 },
+  ];
+
+  const rewards = [
+    { name: "$35 Nike Hoodie", xp: 300 },
+    { name: "$120 Mercari Shoes", xp: 620 },
+    { name: "Iron Armor ($30 Amazon)", xp: 300 },
+    { name: "Gold Armor ($40 Amazon)", xp: 400 },
+    { name: "Diamond Armor ($60 Amazon)", xp: 600 },
+  ];
+
+  const legendaryRewards = [
+    { name: "$200 Room Makeover", xp: 1200 },
+    { name: "$1000 Sim Racing Rig", xp: 6000 },
+    { name: "$1500 Big Screen Beyond", xp: 6500 },
+  ];
+
+  const completeTask = (task) => {
+    setXp(xp + task.xp);
+    setBalance(balance + task.money);
+  };
+
+  const claimReward = (reward) => {
+    if (xp >= reward.xp) {
+      setXp(xp - reward.xp);
+      alert(`You claimed: ${reward.name}`);
+    } else {
+      alert("Not enough XP!");
+    }
+  };
+
+  return (
+    <div className="p-6 space-y-4">
+      <h1 className="text-xl font-bold">RPG Business Game</h1>
+      <Progress value={(xp / 6500) * 100} className="w-full" />
+      <p>XP: {xp} | Balance: ${balance}</p>
+      
+      <h2 className="text-lg font-bold">Tasks</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {tasks.map((task, index) => (
+          <Card key={index}>
+            <CardContent className="p-4">
+              <p>{task.name}</p>
+              <p>+{task.xp} XP | +${task.money}</p>
+              <Button onClick={() => completeTask(task)}>Complete</Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      
+      <h2 className="text-lg font-bold">Rewards</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {rewards.map((reward, index) => (
+          <Card key={index}>
+            <CardContent className="p-4">
+              <p>{reward.name}</p>
+              <p>Cost: {reward.xp} XP</p>
+              <Button onClick={() => claimReward(reward)}>Claim</Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      
+      <h2 className="text-lg font-bold">Legendary Rewards</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {legendaryRewards.map((reward, index) => (
+          <Card key={index}>
+            <CardContent className="p-4">
+              <p>{reward.name}</p>
+              <p>Cost: {reward.xp} XP</p>
+              <Button onClick={() => claimReward(reward)}>Claim</Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
